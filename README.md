@@ -35,3 +35,44 @@ A clean, responsive dashboard designed to showcase student rosters, track key me
 
 * **Elevation through Shadows**: Uses standard box-shadow properties on cards to create depth, simulating physical elevation against a light gray background.
 * **Solid Color Palettes**: Uses a primary blue accent color for buttons and active states, replacing all previous gradients with solid, basic colors to ensure high contrast and readability.
+
+## React Concepts Explained
+
+### Component-Based Architecture
+Instead of building one large page, React breaks the UI into small, independent pieces called components. Each component owns its own logic and appearance. This makes code reusable, easier to debug, and simpler to maintain — changing one component does not break others.
+
+### Virtual DOM
+React keeps a lightweight copy of the real DOM in memory called the Virtual DOM. When state changes, React updates the Virtual DOM first, compares it to the previous version, and only updates the parts of the real DOM that actually changed. This makes updates fast without re-rendering the entire page.
+
+---
+
+## API Integration
+
+**API used:** [RandomUser API](https://randomuser.me/api/?results=6&nat=us,gb)
+
+- Fetched 6 random users on mount using `useEffect` with an empty dependency array so it runs once
+- Used `async/await` with `try/catch/finally` to handle success and failure cleanly
+- Checked `response.ok` before parsing if the server returns a non-200 status, an error is thrown
+- While loading, a `StatusMessage` component renders a loading state
+- On failure, a `StatusMessage` component renders an error state  the app never crashes
+- Fetched students are merged with seed students using the spread operator
+
+---
+
+## Controlled vs Uncontrolled Forms
+
+**Controlled inputs** React owns the value via `useState`:
+- Every keystroke updates state and triggers a re-render
+- Enables live feedback , preview text, instant validation, disabled buttons
+- Used for: `firstName`, `lastName`, `track`, `score`
+
+**Uncontrolled inputs** — the DOM owns the value, read via `useRef`:
+- No re-render on keystroke. React only reads the value when needed (on submit)
+- Simpler for fields that don't need live feedback
+- Used for: `email`, `isActive` checkbox
+
+**When to use controlled:**
+- Live preview, real-time validation, dependent fields
+
+**When to use uncontrolled:**
+- Simple read-on-submit fields, file inputs, third-party integrations

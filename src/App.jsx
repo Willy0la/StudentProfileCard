@@ -1,114 +1,86 @@
-import "./App.css";
-import Header from "./components/Header";
-import StudentList from "./components/StudentList";
+import "./App.css"
+import Header from "./components/Header"
+import StudentList from "./components/StudentList"
+import EnrollForm from "./components/EnrollForm"
+import StatusMessage from "./components/StatusMessage"
+import ClassButton from "./components/ClassButton"
+import { SEED_STUDENTS, TRACKS } from "./components/StudentArray"
+import { useEffect, useState } from "react"
 
-const students = [
-  {
-    id: 1,
-    firstName: "Amara",
-    lastName: "Johnson",
-    track: "Frontend",
-    score: 92,
-    isActive: true,
-    skills: ["React", "CSS", "TypeScript"],
-    avatar: "https://i.pravatar.cc/150?img=1",
-  },
-  {
-    id: 2,
-    firstName: "Chidi",
-    lastName: "Okafor",
-    track: "Backend",
-    score: 67,
-    isActive: true,
-    skills: ["Python", "Django"],
-    avatar: "https://i.pravatar.cc/150?img=3",
-  },
-  {
-    id: 3,
-    firstName: "Fatima",
-    lastName: "Hassan",
-    track: "Frontend",
-    score: 88,
-    isActive: false,
-    skills: ["HTML", "CSS", "JavaScript", "Vue"],
-    avatar: "https://i.pravatar.cc/150?img=5",
-  },
-  {
-    id: 4,
-    firstName: "Emeka",
-    lastName: "Nwosu",
-    track: "Mobile",
-    score: 45,
-    isActive: true,
-    skills: [],
-    avatar: "https://i.pravatar.cc/150?img=7",
-  },
-  {
-    id: 5,
-    firstName: "Zara",
-    lastName: "Ahmed",
-    track: "Frontend",
-    score: 76,
-    isActive: true,
-    skills: ["React", "Node.js"],
-    avatar: "https://i.pravatar.cc/150?img=9",
-  },
-  {
-    id: 6,
-    firstName: "David",
-    lastName: "Okwu",
-    track: "Backend",
-    score: 53,
-    isActive: false,
-    skills: ["SQL"],
-    avatar: "https://i.pravatar.cc/150?img=11",
-  },
-  {
-    id: 7,
-    firstName: "Grace",
-    lastName: "Eze",
-    track: "Mobile",
-    score: 81,
-    isActive: true,
-    skills: ["Dart", "Flutter", "Firebase"],
-    avatar: "https://i.pravatar.cc/150?img=13",
-  },
-  {
-    id: 8,
-    firstName: "Tunde",
-    lastName: "Bakare",
-    track: "Frontend",
-    score: 39,
-    isActive: true,
-    skills: ["HTML", "CSS"],
-    avatar: "https://i.pravatar.cc/150?img=15",
-  },
-];
-
-
-// Calculate metrics using reduce
-const totalScore = students.reduce((sum, item) => sum + item.score, 0);
-const averageScore = totalScore / students.length;
+const getAverage = (list) => {
+  if (list.length === 0) return 0
+  return (list.reduce((sum, s) => sum + s.score, 0) / list.length).toFixed(1)
+}
 
 const App = () => {
+  const [students, setStudents] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  const fetchStudents = async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await fetch('https://randomuser.me/api/?results=6&nat=us,gb')
+      if (!res.ok) throw new Error('Failed to fetch students')
+      const data = await res.json()
+      const fetched = data.results.map((user, index) => ({
+        id: user.login.uuid,
+        firstName: user.name.first,
+        lastName: user.name.last,
+        email: user.email,
+        avatar: user.picture.thumbnail,
+        track: TRACKS[index % TRACKS.length],
+        score: Math.floor(Math.random() * 61) + 40,
+        isActive: true,
+        skills: []
+      }))
+      setStudents([...SEED_STUDENTS, ...fetched])
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchStudents()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleEnroll = (newStudent) => {
+    setStudents((prev) => [newStudent, ...prev])
+  }
+
+  if (loading) return <StatusMessage type="loading" />
+  if (error) return <StatusMessage type="error" />
+
   return (
     <div className="app-container">
       <Header
-        title="KodeCamp 6.0 — Student Dashboard"
+        title="KodeCamp 6.0 — Enrollment Portal"
         studentCount={students.length}
-        averageScore={averageScore.toFixed(1)}
+        averageScore={getAverage(students)}
       />
 
       <div className="filter-bar">
         <button className="filter-btn active">Show All</button>
         <button className="filter-btn">Show Active Only</button>
+        <ClassButton
+          title="Refresh Roster"
+          onClick={fetchStudents}
+          className="filter-btn"
+        />
       </div>
 
-      <StudentList students={students} title="Student Roster">
-        <p className="footer-text">End of student list — {students.length} total</p>
-      </StudentList>
-    </div>
-  );
-};
+      <EnrollForm onEnroll={handleEnroll} tracks={TRACKS} />
 
-export default App;
+      <StudentList students={students} title="Student Roster">
+        <p className="footer-text">End of roster — {students.length} total</p>
+      </StudentList>
+
+    </div>
+  )
+}
+
+export default App

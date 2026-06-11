@@ -1,3 +1,4 @@
+
 const Header = ({ title, studentCount, averageScore }) => {
   return (
     <header className="app-header">
@@ -5,8 +6,9 @@ const Header = ({ title, studentCount, averageScore }) => {
       <p className="header-info">
         {studentCount} Students Enrolled | Class Average: {averageScore}%
       </p>
+    
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
