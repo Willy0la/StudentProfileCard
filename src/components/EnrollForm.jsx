@@ -67,7 +67,7 @@ return (
     <h2 className="enroll-title">Enroll New Student</h2>
     <form onSubmit={handleForm}>
       <div className="form-grid">
-1        <div className="form-group">
+        <div className="form-group">
           <label htmlFor="firstName">First Name</label>
           <input type="text" value={form.firstName} onChange={handleChange} id="firstName" name="firstName" placeholder="First name" />
           {errors.firstName && <p className="error">{errors.firstName}</p>}
