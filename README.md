@@ -35,10 +35,10 @@ A clean, responsive dashboard designed to showcase student rosters, track key me
 
 ### App
 * **Route Declaration**: Defines all top-level routes (`/`, `/students/:id`, `/enroll`, and a catch-all `*`) using `<Routes>`/`<Route>`, keeping `<Navbar />` outside `<Routes>` so it persists across every page.
-* **Lifted Roster State**: Owns `students`, `loading`, `error`, and the fetch logic at the top level so a student enrolled on `/enroll` is immediately visible back on `/` — no route has its own disconnected copy of the data.
+* **Lifted Roster State**: Owns `students`, `loading`, `error`, and the fetch logic at the top level so a student enrolled on `/enroll` is immediately visible back on `/`  no route has its own disconnected copy of the data.
 
 ### Enroll Page
-* **Form Isolation**: Renders `EnrollForm` on its own dedicated route rather than inline on the homepage, matching the single-responsibility split between "view roster" and "add student."
+* **Form Isolation**: Renders `EnrollForm` on its own dedicated route rather than inline on the homepage, matching the single responsibility split between "view roster" and "add student."
 * **Post-Submit Redirect**: Wraps the `onEnroll` callback passed down from `App` with an additional `navigate("/")` call, so a successful enrollment automatically returns the user to the roster without needing a manual link click.
 
 ### Student Detail Page
