@@ -29,6 +29,29 @@ A clean, responsive dashboard designed to showcase student rosters, track key me
 ### Badge
 * **Dynamic Styling Classes**: Dynamically maps label text to CSS classes by processing strings with regular expressions (replacing colons and spaces with hyphens). This ensures category-specific colors and backgrounds are applied accurately.
 
+### Navbar
+* **Active Link Detection**: Uses `NavLink`'s `isActive` render-prop pattern to dynamically apply a CSS class, removing any need for manual `hook` comparisons to determine which page is current.
+* **Centralized Link Data**: Pulls its link list from a separate `NavArray` data file rather than hardcoding `<NavLink>` elements, so adding or removing a page doesn't require touching the component itself.
+
+### App
+* **Route Declaration**: Defines all top-level routes (`/`, `/students/:id`, `/enroll`, and a catch-all `*`) using `<Routes>`/`<Route>`, keeping `<Navbar />` outside `<Routes>` so it persists across every page.
+* **Lifted Roster State**: Owns `students`, `loading`, `error`, and the fetch logic at the top level so a student enrolled on `/enroll` is immediately visible back on `/` — no route has its own disconnected copy of the data.
+
+### Enroll Page
+* **Form Isolation**: Renders `EnrollForm` on its own dedicated route rather than inline on the homepage, matching the single-responsibility split between "view roster" and "add student."
+* **Post-Submit Redirect**: Wraps the `onEnroll` callback passed down from `App` with an additional `navigate("/")` call, so a successful enrollment automatically returns the user to the roster without needing a manual link click.
+
+### Student Detail Page
+* **Dynamic Param Lookup**: Reads the `id` segment of the URL via `useParams()` and finds the matching student by comparing it against the roster array.
+* **Type-Safe Matching**: Normalizes both sides of the comparison to strings before checking equality, since `useParams()` always returns strings while seed data stores `id` as a number.
+* **Graceful Fallback**: Renders a "Student not found" message with a link home when no match exists, rather than crashing or rendering blank.
+
+### Not Found Page
+* **Catch-All Handling**: Matches any URL that doesn't correspond to a defined route, using React Router's `*` wildcard path, and presents a friendly message with a link back to the roster.
+
+### Student Card
+* **Navigable Card Name**: Wraps the student's name in a `<Link to={\`/students/${id}\`}>`, enabling client-side navigation to that student's detail view without a full page reload.
+
 ---
 
 ## Visual Design Approaches

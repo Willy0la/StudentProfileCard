@@ -1,8 +1,9 @@
+import { Link } from "react-router-dom";
 import Badge from "./Badge";
 import StatBar from "./StatBar";
 
-const StudentCard = ({ student: { firstName, lastName, track, score, isActive, skills, avatar } }) => {
-   const getGrade = (s) => {
+const StudentCard = ({ student: { id, firstName, lastName, track, score, isActive, skills, avatar } }) => {
+  const getGrade = (s) => {
     if (s >= 90) return "A";
     if (s >= 80) return "B";
     if (s >= 70) return "C";
@@ -18,8 +19,11 @@ const StudentCard = ({ student: { firstName, lastName, track, score, isActive, s
       <div className="card-avatar-container">
         <img src={avatar} alt={fullName} className="card-avatar" />
       </div>
-      <h2 className="card-name">{fullName}</h2>
-      
+
+      <Link to={`/students/${id}`} className="card-name-link">
+        <h2 className="card-name">{fullName}</h2>
+      </Link>
+
       <div className="card-badges">
         <Badge label={track} type="track" />
         <Badge label={isActive ? "Active" : "Inactive"} type="status" />

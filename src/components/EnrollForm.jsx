@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import Button from "./Button";
-import "../App.css"
-function EnrollForm({onEnroll, tracks}) {
+ function EnrollForm({onEnroll, tracks}) {
   const emailRef = useRef();
   const isActiveRef = useRef();
   const [form, setFormData] = useState({

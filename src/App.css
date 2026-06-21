@@ -439,3 +439,151 @@ body {
   .form-grid     { grid-template-columns: 1fr; }
   .enroll-btn    { width: 100%; text-align: center; }
 }
+
+/* ─── Navbar ─── */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 16px 24px;
+  background: #ffffff;
+  border: 1px solid var(--card-border-active);
+  border-radius: 100px;
+  box-shadow: var(--shadow-premium);
+}
+
+.navbar li {
+  display: flex;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 100px;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background: #e2e8f0;
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--primary-blue);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+}
+
+/* ─── Card Name → Detail Link ─── */
+.card-name-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card-name-link:hover .card-name {
+  color: var(--primary-blue);
+}
+
+/* ─── Student Detail Page ─── */
+.student-detail {
+  background: #ffffff;
+  border: 1px solid var(--card-border-active);
+  border-radius: 20px;
+  padding: 28px 36px;
+  box-shadow: var(--shadow-premium);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.detail-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid #e2e8f0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  object-fit: cover;
+  margin-bottom: 8px;
+}
+
+.student-detail h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.student-detail p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 500;
+}
+
+.student-detail a {
+  margin-top: 16px;
+  text-decoration: none;
+  background-color: var(--primary-blue);
+  color: #ffffff;
+  border-radius: 100px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.student-detail a:hover {
+  background-color: #1d4ed8;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+/* ─── Not Found / 404 ─── */
+.not-found {
+  background: #ffffff;
+  border: 1px dashed var(--card-border-inactive);
+  border-radius: 20px;
+  padding: 40px 36px;
+  box-shadow: var(--shadow-premium);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.not-found h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.not-found p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.not-found a {
+  margin-top: 8px;
+  text-decoration: none;
+  background-color: var(--primary-blue);
+  color: #ffffff;
+  border-radius: 100px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.not-found a:hover {
+  background-color: #1d4ed8;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
