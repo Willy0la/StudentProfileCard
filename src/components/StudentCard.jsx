@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import Badge from "./Badge";
 import StatBar from "./StatBar";
-import styles from "../styles/StudentCard.module.css";
+import styles from "../styles/studentCard.module.css";
 
 const StudentCard = ({
   student: { id, firstName, lastName, track, score, isActive, skills, avatar },
