@@ -1,0 +1,109 @@
+ .card {
+    border-radius: 18px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+    background: #ffffff;
+}
+
+.cardActive {
+    border: 2px solid #22c55e;
+}
+
+.cardActive:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+    border-color: #16a34a;
+}
+
+.cardWarning {
+    border: 2px solid #facc15;
+}
+
+.cardWarning:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+    border-color: #ca8a04;
+}
+
+.cardInactive {
+    border: 2px dashed #f59e0b;
+    opacity: 0.75;
+}
+
+.cardInactive:hover {
+    opacity: 0.95;
+    transform: translateY(-2px);
+}
+
+.cardFail {
+    border: 2px solid #ef4444;
+}
+
+.avatarContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 3px solid #e2e8f0;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .avatar {
+    transform: scale(1.05);
+}
+
+.nameLink {
+    text-decoration: none;
+}
+
+.name {
+    font-size: 19px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+    color: #0f172a;
+}
+
+.name:hover {
+    color: #2563eb;
+}
+
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.stat { margin: 8px 0; }
+
+.skills {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid #f1f5f9;
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.5;
+}
+
+.skillsLabel {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.skillItem { color: #334155; }
+
+.skillsEmpty {
+    font-style: italic;
+    color: #64748b;
+}

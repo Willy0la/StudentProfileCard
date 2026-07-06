@@ -1,8 +1,11 @@
-import { useParams, Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useStudents } from "../hooks/useStudents";
+import "../styles/StudentDetail.css";
 
-function StudentDetailPage({ students }) {
-const { id } = useParams();
-const student = students.find((s) => String(s.id) === id);
+const StudentDetailPage = () => {
+  const { id } = useParams();
+  const { students } = useStudents();
+  const student = students.find((entry) => String(entry.id) === id);
 
   if (!student) {
     return (
@@ -10,23 +13,37 @@ const student = students.find((s) => String(s.id) === id);
         <p>Student not found.</p>
         <Link to="/">Back to Home</Link>
       </div>
-    )
+    );
   }
 
-  const { firstName, lastName, track, score, isActive, skills, email, avatar } = student;
+  const { firstName, lastName, track, score, isActive, skills, email, avatar } =
+    student;
 
   return (
-    <div className="student-detail">
-      <img src={avatar} alt={`${firstName} ${lastName}`} className="detail-avatar" />
-      <h2>{firstName} {lastName}</h2>
-      <p>Track: {track}</p>
-      <p>Score: {score}%</p>
-      <p>Status: {isActive ? "Active" : "Inactive"}</p>
-      <p>Email: {email}</p>
-      <p>Skills: {skills && skills.length > 0 ? skills.join(", ") : "No skills listed yet"}</p>
-      <Link to="/">Back to Roster</Link>
+    <div className="student-detail-page">
+      <img
+        src={avatar}
+        alt={`${firstName} ${lastName}`}
+        className="detail-avatar"
+      />
+      <h2 className="detail-title">
+        {firstName} {lastName}
+      </h2>
+      <p className="detail-meta">Track: {track}</p>
+      <p className="detail-meta">Score: {score}%</p>
+      <p className="detail-meta">Status: {isActive ? "Active" : "Inactive"}</p>
+      <p className="detail-meta">Email: {email}</p>
+      <p className="detail-meta">
+        Skills:{" "}
+        {skills && skills.length > 0
+          ? skills.join(", ")
+          : "No skills listed yet"}
+      </p>
+      <Link to="/" className="back-button">
+        Back to Roster
+      </Link>
     </div>
-  )
-}
+  );
+};
 
 export default StudentDetailPage;

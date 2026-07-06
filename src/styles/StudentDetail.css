@@ -1,0 +1,45 @@
+.student-detail-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 32px 24px;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.detail-avatar {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  border: 3px solid #e2e8f0;
+  object-fit: cover;
+}
+
+.detail-title {
+  margin: 0;
+  font-size: 24px;
+  color: #0f172a;
+}
+
+.detail-meta {
+  margin: 0;
+  color: #475569;
+  font-size: 15px;
+}
+
+.back-button {
+  margin-top: 8px;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.back-button:hover {
+  background-color: #1d4ed8;
+}

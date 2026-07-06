@@ -1,29 +1,52 @@
-import { useRef, useState } from "react";
-import Button from "./Button";
- function EnrollForm({onEnroll, tracks}) {
-  const emailRef = useRef();
-  const isActiveRef = useRef();
+// Styling method: Material UI (MUI)
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useStudents } from "../hooks/useStudents";
+import { TRACKS } from "../utils/StudentArray";
+
+const EnrollForm = () => {
+  const firstNameRef = useRef(null);
+  const navigate = useNavigate();
+  const { dispatch } = useStudents();
   const [form, setFormData] = useState({
     firstName: "",
     lastName: "",
     track: "",
     score: "",
-    skills:""
+    skills: "",
+    email: "",
+    isActive: false,
   });
-
   const [errors, setErrors] = useState({});
-  const handleChange = (e) => {
-    const { value, name } = e.target;
 
+  useEffect(() => {
+    firstNameRef.current?.focus();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const handleForm = (e) => {
     e.preventDefault();
-
     const newErrors = {};
 
     if (!form.firstName.trim()) newErrors.firstName = "First name is required";
@@ -32,8 +55,11 @@ import Button from "./Button";
     if (!form.score) newErrors.score = "Score is required";
     else if (form.score < 0 || form.score > 100)
       newErrors.score = "Score must be 0-100";
-    if (!emailRef.current.value.includes("@"))
+
+    const emailValue = form.email.trim();
+    if (!emailValue.includes("@")) {
       newErrors.email = "Valid email is required";
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -42,95 +68,193 @@ import Button from "./Button";
 
     setErrors({});
 
-   const student = {
-  id: crypto.randomUUID(),
-  ...form,
-  score: Number(form.score),
-  skills: form.skills
-    ? form.skills.split(",").map((s) => s.trim()).filter(Boolean)
-    : [],
-  email: emailRef.current.value,
-  isActive: isActiveRef.current.checked,
-  avatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70) + 1}`,
-}
+    const student = {
+      id: crypto.randomUUID(),
+      ...form,
+      score: Number(form.score),
+      skills: form.skills
+        ? form.skills
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : [],
+      email: emailValue,
+      isActive: form.isActive,
+      avatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70) + 1}`,
+    };
 
+    dispatch({ type: "ADD_STUDENT", payload: student });
+    setFormData({
+      firstName: "",
+      lastName: "",
+      track: "",
+      score: "",
+      skills: "",
+      email: "",
+      isActive: false,
+    });
 
-    onEnroll(student) 
-
-setFormData({ firstName: "", lastName: "", track: "", score: "" ,skills:""})
-emailRef.current.value = ""
-isActiveRef.current.checked = false
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    navigate("/");
   };
-return (
-  <section className="enroll-section">
-    <h2 className="enroll-title">Enroll New Student</h2>
-    <form onSubmit={handleForm}>
-      <div className="form-grid">
-        <div className="form-group">
-          <label htmlFor="firstName">First Name</label>
-          <input type="text" value={form.firstName} onChange={handleChange} id="firstName" name="firstName" placeholder="First name" />
-          {errors.firstName && <p className="error">{errors.firstName}</p>}
-        </div>
 
-      
-        <div className="form-group">
-          <label htmlFor="lastName">Last Name</label>
-          <input type="text" value={form.lastName} onChange={handleChange} id="lastName" name="lastName" placeholder="Last name" />
-          {errors.lastName && <p className="error">{errors.lastName}</p>}
-        </div>
+  return (
+    <Box
+      sx={{
+        maxWidth: 800,
+        margin: "32px auto",
+        padding: "32px",
+        background: "#fff",
+        borderRadius: "20px",
+        boxShadow: "0 10px 25px -5px rgba(0,0,0,0.05)",
+      }}
+    >
+      <Typography variant="h5" fontWeight={700} mb={3}>
+        Enroll New Student
+      </Typography>
 
-       
-        <div className="form-group">
-          <label htmlFor="track">Track</label>
-          <select id="track" name="track" value={form.track} onChange={handleChange}>
-            <option value="">Select Track</option>
-            {tracks.map((track) => (
-              <option key={track} value={track}>{track}</option>
-            ))}
-          </select>
-          {errors.track && <p className="error">{errors.track}</p>}
-        </div>
+      <form onSubmit={handleForm}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="First Name"
+              name="firstName"
+              value={form.firstName}
+              onChange={handleChange}
+              error={!!errors.firstName}
+              helperText={errors.firstName}
+              placeholder="First name"
+              inputRef={firstNameRef}
+            />
+          </Grid>
 
-         <div className="form-group">
-          <label htmlFor="score">Score</label>
-          <input type="number" value={form.score} onChange={handleChange} id="score" name="score" placeholder="0-100" min="0" max="100" />
-          {errors.score && <p className="error">{errors.score}</p>}
-        </div>
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="Last Name"
+              name="lastName"
+              value={form.lastName}
+              onChange={handleChange}
+              error={!!errors.lastName}
+              helperText={errors.lastName}
+              placeholder="Last name"
+            />
+          </Grid>
 
-         <div className="form-group">
-          <label htmlFor="skills">Skills <span className="optional">(optional — comma separated)</span></label>
-          <input type="text" value={form.skills} onChange={handleChange} id="skills" name="skills" placeholder="e.g. React, CSS, Node.js" />
-        </div>
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth error={!!errors.track}>
+              <InputLabel>Track</InputLabel>
+              <Select
+                name="track"
+                value={form.track}
+                label="Track"
+                onChange={handleChange}
+              >
+                <MenuItem value="">Select Track</MenuItem>
+                {TRACKS.map((track) => (
+                  <MenuItem key={track} value={track}>
+                    {track}
+                  </MenuItem>
+                ))}
+              </Select>
+              {errors.track && <FormHelperText>{errors.track}</FormHelperText>}
+            </FormControl>
+          </Grid>
 
-         <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input type="email" ref={emailRef} id="email" name="email" defaultValue="" placeholder="email@example.com" />
-          {errors.email && <p className="error">{errors.email}</p>}
-        </div>
-      </div>
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="Score"
+              name="score"
+              type="number"
+              value={form.score}
+              onChange={handleChange}
+              error={!!errors.score}
+              helperText={errors.score}
+              placeholder="0-100"
+              slotProps={{ input: { min: 0, max: 100 } }}
+            />
+          </Grid>
 
-       <div className="form-group">
-        <label className="checkbox-label" htmlFor="isActive">
-          <input type="checkbox" defaultChecked={false} ref={isActiveRef} id="isActive" name="isActive" />
-          Active
-        </label>
-      </div>
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="Skills (optional — comma separated)"
+              name="skills"
+              value={form.skills}
+              onChange={handleChange}
+              placeholder="e.g. React, CSS, Node.js"
+            />
+          </Grid>
 
-      {form.firstName && (
-        <p className="preview">
-          Preview: {form.firstName} {form.lastName} — {form.track} ({form.score})
-        </p>
-      )}
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="Email"
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+              error={!!errors.email}
+              helperText={errors.email}
+              placeholder="email@example.com"
+            />
+          </Grid>
 
-<Button
-  title="Enroll Student"
-  className="enroll-btn"
-  type="submit"
-  disabled={!form.firstName || !form.lastName || !form.track || !form.score}
-/>
-    </form>
-  </section>
-)
-}
+          <Grid item xs={12}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={form.isActive}
+                  onChange={handleChange}
+                  name="isActive"
+                />
+              }
+              label="Active"
+            />
+          </Grid>
+        </Grid>
+
+        {form.firstName && (
+          <Typography
+            sx={{
+              mt: 2,
+              mb: 2,
+              color: "#2563eb",
+              backgroundColor: "rgba(37,99,235,0.06)",
+              padding: "10px 14px",
+              borderRadius: "8px",
+              fontSize: "13px",
+              fontWeight: 500,
+            }}
+          >
+            Preview: {form.firstName} {form.lastName} — {form.track} (
+            {form.score})
+          </Typography>
+        )}
+
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={
+            !form.firstName || !form.lastName || !form.track || !form.score
+          }
+          sx={{
+            mt: 2,
+            borderRadius: "100px",
+            padding: "10px 28px",
+            textTransform: "none",
+            fontWeight: 600,
+            backgroundColor: "#2563eb",
+            "&:hover": { backgroundColor: "#1d4ed8" },
+          }}
+        >
+          Enroll Student
+        </Button>
+      </form>
+    </Box>
+  );
+};
 
 export default EnrollForm;
